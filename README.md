@@ -72,6 +72,9 @@ https://rust.godbolt.org/z/sqo6KcW1K
 
 
 # Useful Links - Background Info
+
+[x86 TSO: A Programmer's Model for x86 Multiprocessors](https://paulcavallaro.com/blog/x86-tso-a-programmers-model-for-x86-multiprocessors/)
+
 [Examining ARM vs X86 Memory Models with Rust](https://www.nickwilcox.com/blog/arm_vs_x86_memory_model/)
 
 [Rust atomics on x86: How and why](https://darkcoding.net/software/rust-atomics-on-x86/)
@@ -81,3 +84,6 @@ https://rust.godbolt.org/z/sqo6KcW1K
 [Rust release and acquire memory ordering by example](https://medium.com/@omid.jn/rust-release-and-acquire-memory-ordering-by-example-d8de58ef4e36)
 
 [Rust Atomics and Locks](https://marabos.nl/atomics/)
+
+[Memory Reordering Caught in the Act](https://preshing.com/20120515/memory-reordering-caught-in-the-act/)
+
