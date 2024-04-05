@@ -6,6 +6,23 @@ Inspired by [Jeff Preshing's blog Memory Reordering Caught in the Act](https://p
 let's recreate the infamous X86 Store/Load Reordering in Rust and explore what's happening 
 
 
+# The scenario
+The scenario is described pretty well in [Paul Cavallaro's blog](https://paulcavallaro.com/blog/x86-tso-a-programmers-model-for-x86-multiprocessors/)
+
+There are 2 threads, Thread 1 and Thread 2.  
+
+| Thread 1       | Thread 2     |
+|----------------|--------------|
+| MOV  [x] ← 1   | MOV  [y] ← 1 |
+| MOV  EAX ← [y] | MOV  EBX ← [x]          |
+
+| Thread 1 Final State | Thread 2 Final State |
+|----------------------|----------------------|
+| EAX == 0        | EBX == 0        |
+
+The program runs these concurrent operations in two threads in a loop and counts how often the final state occurs.   
+When R1 and R2 are both 0, the store-load reordering has occurred.
+
 # Building the code
 You can build the code and generate Assembly.  The assembly output will be available at `target/release/deps/store_load_reordering-<hash>.s`
 ```
