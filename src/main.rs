@@ -1,19 +1,21 @@
 use clap::Parser;
-use std::sync::{Arc, atomic::{AtomicU32, Ordering, fence}, mpsc, Barrier};
-use std::thread;
 use rand::Rng;
+use std::sync::{
+    atomic::{fence, AtomicU32, Ordering},
+    mpsc, Arc, Barrier,
+};
+use std::thread;
 
 static X: AtomicU32 = AtomicU32::new(0);
 static Y: AtomicU32 = AtomicU32::new(0);
 static R1: AtomicU32 = AtomicU32::new(1);
 static R2: AtomicU32 = AtomicU32::new(1);
 
-
 #[derive(Parser, Debug)]
 #[command(version = "1.0", about = "A tool to demonstrate memory ordering effects.", long_about = None)]
 struct Args {
     /// Memory Ordering to use
-    #[arg(short, long, default_value="Relaxed")]
+    #[arg(short, long, default_value = "Relaxed")]
     ordering: String,
     #[arg(short, long)]
     barrier: bool,
@@ -28,7 +30,6 @@ fn parse_ordering(ordering: &str) -> (Ordering, Ordering) {
 }
 
 fn main() {
-
     let args = Args::parse();
     println!("args = {:#?}", args);
 
@@ -46,10 +47,10 @@ fn main() {
         let mut rng = rand::thread_rng();
         while rng.gen_range(0..8) != 0 {} // Random delay
 
-	    // thread 1 Store-Load
+        // thread 1 Store-Load
         X.store(1, store_ordering);
         if args.barrier {
-	        // apply memory barrier
+            // apply memory barrier
             fence(Ordering::SeqCst);
         }
         R1.store(Y.load(load_ordering), Ordering::SeqCst);
@@ -65,7 +66,7 @@ fn main() {
         let mut rng = rand::thread_rng();
         while rng.gen_range(0..8) != 0 {} // Random delay
 
-	    // thread 2 Store-Load
+        // thread 2 Store-Load
         Y.store(1, store_ordering);
         if args.barrier {
             fence(Ordering::SeqCst);
@@ -91,7 +92,10 @@ fn main() {
 
         if r1 == 0 && r2 == 0 {
             reorders += 1;
-            println!("{} Reorders observed after {} iterations", reorders, iterations);
+            println!(
+                "{} Reorders observed after {} iterations",
+                reorders, iterations
+            );
         }
 
         iterations += 1;
